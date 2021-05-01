@@ -9,7 +9,8 @@ project(micro_rov)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   rospy
-  std_msds
+  sensor_msgs
+  std_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -104,7 +105,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES micro_rov
-#  CATKIN_DEPENDS rospy std_msds
+#  CATKIN_DEPENDS rospy std_msgs sensor_msgs 
 #  DEPENDS system_lib
 )
 
