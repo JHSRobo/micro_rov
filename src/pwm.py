@@ -7,6 +7,7 @@ from sensor_msgs.msg import Joy
 
 
 def changeSpeed(values):
+  print(values)
   def callback(data):
     print(data.axes[3])
     if abs(values[0] - abs(data.axes[3])) < 0.1: 
