@@ -10,7 +10,7 @@ def changeSpeed(values):
   rospy.logerr(values)
   def callback(data):
     if abs(values[0] - abs(data.axes[3])) > 0.1: 
-      rospy.logerr(data.axes[3])
+      rospy.logerr(type(data.axes[3]))
       values[1].ChangeDutyCycle(abs(data.axes[3]))  
       values[0] = abs(data.axes[3])
   return callback
