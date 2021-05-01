@@ -28,6 +28,6 @@ if __name__ == "__main__":
   previousValue = 0
 
   rospy.init_node("micro_rov")
-  rospy.Subscriber("joy/joy1", Joy, changeSpeed([previousValue, pwm]))
+  rospy.Subscriber("/joy/joy1", Joy, changeSpeed([previousValue, pwm]))
   rospy.spin()
 
