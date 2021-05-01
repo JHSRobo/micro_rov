@@ -7,9 +7,9 @@ from sensor_msgs.msg import Joy
 
 
 def changeSpeed(values):
-  print(values)
+  rospy.logerr(values)
   def callback(data):
-    print(data.axes[3])
+    rospy.logerr(data.axes[3])
     if abs(values[0] - abs(data.axes[3])) < 0.1: 
       values[1].ChangeDutyCycle(round(abs(data.axes[3]), 2)) 
       values[0] = abs(data.axes[3])
@@ -28,7 +28,7 @@ if __name__ == "__main__":
   previousValue = 0
 
   rospy.init_node("micro_rov")
-  print(123)
+  rospy.logerr(123)
   rospy.Subscriber("/joy/joy1", Joy, changeSpeed([previousValue, pwm]))
   rospy.spin()
 
