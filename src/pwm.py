@@ -21,7 +21,7 @@ def changeSpeed(values):
   def callback(data):
     if abs(previousValue - abs(data.axes[3])) > 0.1: 
       rospy.logerr(type(data.axes[3]))
-      pwm.ChangeDutyCycle(abs(data.axes[3]))  
+      pwm.ChangeDutyCycle(abs(data.axes[3]) * 100)  
       previousValue = abs(data.axes[3])
       rospy.logerr(previousValue)
   return callback
