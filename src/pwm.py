@@ -10,8 +10,8 @@ def changeSpeed(values):
   rospy.logerr(values)
   def callback(data):
     rospy.logerr(data.axes[3])
-    if abs(values[0] - abs(data.axes[3])) < 0.1: 
-      values[1].ChangeDutyCycle(round(abs(data.axes[3]), 2)) 
+    if abs(values[0] - abs(data.axes[3])) > 0.1: 
+      values[1].ChangeDutyCycle(int(abs(data.axes[3])))
       values[0] = abs(data.axes[3])
   return callback
 
@@ -24,7 +24,7 @@ if __name__ == "__main__":
   GPIO.setup(switcher_pin, GPIO.OUT)
   GPIO.setup(duty_cycle_pin, GPIO.OUT) 
   pwm = GPIO.PWM(duty_cycle_pin, frequency)
-  pwm.start(0)
+  pwm.start(100)
   previousValue = 0
 
   rospy.init_node("micro_rov")
