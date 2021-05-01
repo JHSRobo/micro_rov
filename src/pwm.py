@@ -6,13 +6,13 @@ from std_msgs.msg import Bool
 from sensor_msgs.msg import Joy
 
 
-def changeSpeed(previousValue, pwm):
+def changeSpeed(values):
   def callback(data):
     print(data.axes[3])
-    if abs(previousValue - abs(data.axes[3])) < 0.1: 
-      pwm.ChangeDutyCycle(round(abs(data.axes[3]), 2)) 
-      previousValue = abs(data.axes[3])
-
+    if abs(values[0] - abs(data.axes[3])) < 0.1: 
+      values[1].ChangeDutyCycle(round(abs(data.axes[3]), 2)) 
+      values[0] = abs(data.axes[3])
+  return callback
 
 
 if __name__ == "__main__":
@@ -24,8 +24,9 @@ if __name__ == "__main__":
   GPIO.setup(duty_cycle_pin, GPIO.OUT) 
   pwm = GPIO.PWM(duty_cycle_pin, frequency)
   pwm.start(0)
+  previousValue = 0
 
   rospy.init_node("micro_rov")
-  rospy.Subscriber("joy/joy1", Joy, changeSpeed)
+  rospy.Subscriber("joy/joy1", Joy, changeSpeed([previousValue, pwm]))
   rospy.spin()
 
