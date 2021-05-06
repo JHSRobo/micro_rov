@@ -12,24 +12,26 @@ def changeSpeed(values):
   duty_cycle_pin = 33
   frequency = 1000
   GPIO.setup(switcher_pin, GPIO.OUT)
-  GPIO.setup(duty_cycle_pin, GPIO.OUT) 
+  GPIO.setup(duty_cycle_pin, GPIO.OUT)
   pwm = GPIO.PWM(duty_cycle_pin, frequency)
-  pwm.start(100)
-  
+  pwm.start(0)
+
   previousValue = 0
-  
+  direction = 1
+
   def callback(data):
-    if abs(previousValue - abs(data.axes[3])) > 0.1: 
-      rospy.logerr(type(data.axes[3]))
-      pwm.ChangeDutyCycle(abs(data.axes[3]) * 100)  
+    # Created a 0.1 threshold before changing the speed
+    if abs(previousValue - abs(data.axes[3])) > 0.1:
+      pwm.ChangeDutyCycle(abs(data.axes[3]) * 100)
       previousValue = abs(data.axes[3])
-      rospy.logerr(previousValue)
+    # switch the direction if the previous number and this number have different signs using xor
+    if previousValue ^ data.axes[3] < 0:
+      direction *= -1
+      GPIO.output(switcher_pin, direction == 1)
   return callback
 
 
 if __name__ == "__main__":
   rospy.init_node("micro_rov")
-  rospy.logerr(123)
   rospy.Subscriber("/joy/joy1", Joy, changeSpeed())
   rospy.spin()
-
