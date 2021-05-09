@@ -27,11 +27,14 @@ def changeSpeed(values):
     # switch the direction if the previous number and this number have different signs using xor
     if previousValue ^ data.axes[3] < 0:
       direction *= -1
+      rospy.loginfo('micro_rov: switched direction to {}'.format(direction))
       GPIO.output(switcher_pin, direction == 1)
   return callback
 
 
 if __name__ == "__main__":
   rospy.init_node("micro_rov")
+  # This IS RIGHT. changeSpeed returns a function so it will call changeSpeed()()
+  # If you change this and it breaks it is your fault
   rospy.Subscriber("/joy/joy1", Joy, changeSpeed())
   rospy.spin()
