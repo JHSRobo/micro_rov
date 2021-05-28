@@ -6,7 +6,7 @@ from std_msgs.msg import Bool
 from sensor_msgs.msg import Joy
 
 
-def changeSpeed(values):
+def changeSpeed():
   GPIO.setmode(GPIO.BOARD)
   switcher_pin = 32
   duty_cycle_pin = 33
