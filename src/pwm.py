@@ -31,7 +31,7 @@ class PWM:
             if self.previousValue * data.axes[3] < 0:
               self.direction *= -1
               rospy.loginfo('micro_rov: switched direction to {}'.format(self.direction))
-              GPIO.output(self.switcher_pin, direction == 1)
+              GPIO.output(self.switcher_pin, self.direction == 1)
 
 
 if __name__ == "__main__":
