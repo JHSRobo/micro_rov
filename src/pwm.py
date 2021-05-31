@@ -25,7 +25,7 @@ class PWM:
     def callback(self, data):
         # Created a 0.1 threshold before changing the speed
         if abs(self.previousValue - data.axes[3]) > 0.1:
-            if abs(data.axes[3] < 0.25):
+            if abs(data.axes[3]) < 0.25:
                 self.pwm.ChangeDutyCycle(0)
             else:
                 self.pwm.ChangeDutyCycle(abs(data.axes[3]) * 100)
