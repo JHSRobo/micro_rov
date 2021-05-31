@@ -26,12 +26,13 @@ class PWM:
     # Created a 0.1 threshold before changing the speed
         if abs(self.previousValue - data.axes[3]) > 0.1:
             self.pwm.ChangeDutyCycle(abs(data.axes[3]) * 100)
+            self.previousValue = data.axes[3]
             # switch the direction if the previous number and this number have different signs using xor
             if self.direction * data.axes[3] < 0:
               self.direction = -1 if data.axes[3] < 0 else 1
               rospy.loginfo('micro_rov: switched direction to {}'.format('forwards' if data.axes[3] > 0 else 'backwards'))
-              GPIO.output(self.switcher_pin, int(data.axes[3] > 0))
-            self.previousValue = data.axes[3]
+              GPIO.output(self.switcher_pin, int(data.axes[3] < 0))
+
 
 if __name__ == "__main__":
   pwm = PWM(32, 33, 1000)
