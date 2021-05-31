@@ -12,7 +12,7 @@ class PWM:
         self.frequency = frequency
         self.gpio_setup(GPIO.BOARD)
 
-        self.direction = 1
+        self.direction = -1
         self.previousValue = 0
 
     def gpio_setup(self, mode):
