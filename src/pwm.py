@@ -29,7 +29,7 @@ class PWM:
             # switch the direction if the previous number and this number have different signs using xor
             if self.previousValue * data.axes[3] < 0:
               rospy.loginfo('micro_rov: switched direction to {}'.format('forwards' if data.axes[3] > 0 else 'backwards'))
-              GPIO.output(self.switcher_pin, data.axes[3] > 0)
+              GPIO.output(self.switcher_pin, int(data.axes[3] > 0))
 
 
 if __name__ == "__main__":
