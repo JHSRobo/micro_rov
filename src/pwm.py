@@ -5,36 +5,37 @@ import rospy
 from std_msgs.msg import Bool
 from sensor_msgs.msg import Joy
 
+class PWM:
+    def __init__(self, switcher_pin, duty_cycle_pin, frequency):
+        self.switcher_pin = switcher_pin
+        self.duty_cycle_pin = duty_cycle_pin
+        self.frequency = frequency
+        self.gpio_setup(GPIO.BOARD)
 
-def changeSpeed(values):
-  GPIO.setmode(GPIO.BOARD)
-  switcher_pin = 32
-  duty_cycle_pin = 33
-  frequency = 1000
-  GPIO.setup(switcher_pin, GPIO.OUT)
-  GPIO.setup(duty_cycle_pin, GPIO.OUT)
-  pwm = GPIO.PWM(duty_cycle_pin, frequency)
-  pwm.start(0)
+        self.direction = 1
+        self.previousValue = 0
 
-  previousValue = 0
-  direction = 1
+    def gpio_setup(self, mode):
+        GPIO.setmode(mode)
+        GPIO.setup(self.switcher_pin, GPIO.OUT)
+        GPIO.setup(self.duty_cycle_pin, GPIO.OUT)
+        self.pwm = GPIO.PWM(self.duty_cycle_pin, self.frequency)
+        self.pwm.start(0)
 
-  def callback(data):
+    def callback(self, data):
     # Created a 0.1 threshold before changing the speed
-    if abs(previousValue - abs(data.axes[3])) > 0.1:
-      pwm.ChangeDutyCycle(abs(data.axes[3]) * 100)
-      previousValue = abs(data.axes[3])
-    # switch the direction if the previous number and this number have different signs using xor
-    if previousValue ^ data.axes[3] < 0:
-      direction *= -1
-      rospy.loginfo('micro_rov: switched direction to {}'.format(direction))
-      GPIO.output(switcher_pin, direction == 1)
-  return callback
+        if abs(self.previousValue - data.axes[3]) > 0.1:
+            self.pwm.ChangeDutyCycle(abs(data.axes[3]) * 100)
+            self.previousValue = abs(data.axes[3])
+            # switch the direction if the previous number and this number have different signs using xor
+            if self.previousValue ^ data.axes[3] < 0:
+              self.direction *= -1
+              rospy.loginfo('micro_rov: switched direction to {}'.format(self.direction))
+              GPIO.output(self.switcher_pin, direction == 1)
 
 
 if __name__ == "__main__":
+  pwm = PWM(32, 33, 1000)
   rospy.init_node("micro_rov")
-  # This IS RIGHT. changeSpeed returns a function so it will call changeSpeed()()
-  # If you change this and it breaks it is your fault
-  rospy.Subscriber("/joy/joy1", Joy, changeSpeed())
+  rospy.Subscriber("/joy/joy1", Joy, pwm.callback())
   rospy.spin()
