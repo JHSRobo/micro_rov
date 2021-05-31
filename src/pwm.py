@@ -37,5 +37,5 @@ class PWM:
 if __name__ == "__main__":
   pwm = PWM(32, 33, 1000)
   rospy.init_node("micro_rov")
-  rospy.Subscriber("/joy/joy1", Joy, pwm.callback())
+  rospy.Subscriber("/joy/joy1", Joy, pwm.callback)
   rospy.spin()
