@@ -23,9 +23,12 @@ class PWM:
         self.pwm.start(0)
 
     def callback(self, data):
-    # Created a 0.1 threshold before changing the speed
+        # Created a 0.1 threshold before changing the speed
         if abs(self.previousValue - data.axes[3]) > 0.1:
-            self.pwm.ChangeDutyCycle(abs(data.axes[3]) * 100)
+            if abs(data.axes[3] < 0.25):
+                self.pwm.ChangeDutyCycle(0)
+            else:
+                self.pwm.ChangeDutyCycle(abs(data.axes[3]) * 100)
             self.previousValue = data.axes[3]
             # switch the direction if the previous number and this number have different signs using xor
             if self.direction * data.axes[3] < 0:
