@@ -28,7 +28,7 @@ class PWM:
             self.pwm.ChangeDutyCycle(abs(data.axes[3]) * 100)
             self.previousValue = abs(data.axes[3])
             # switch the direction if the previous number and this number have different signs using xor
-            if self.previousValue ^ data.axes[3] < 0:
+            if self.previousValue * data.axes[3] < 0:
               self.direction *= -1
               rospy.loginfo('micro_rov: switched direction to {}'.format(self.direction))
               GPIO.output(self.switcher_pin, direction == 1)
