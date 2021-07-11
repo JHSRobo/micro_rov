@@ -27,6 +27,7 @@ class PWM:
         # Created a 0.1 threshold before changing the speed
         if not self.enabled:
             self.pwm.ChangeDutyCycle(0)
+            self.previousValue = 0
         elif abs(self.previousValue - data.axes[3]) > 0.1 and self.enabled:
             if abs(data.axes[3]) < 0.25:
                 self.pwm.ChangeDutyCycle(0)
